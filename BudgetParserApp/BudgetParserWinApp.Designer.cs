@@ -44,17 +44,19 @@
             // 
             // txtFilePath
             // 
-            this.txtFilePath.Location = new System.Drawing.Point(31, 49);
+            this.txtFilePath.Location = new System.Drawing.Point(62, 95);
+            this.txtFilePath.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.txtFilePath.Name = "txtFilePath";
-            this.txtFilePath.Size = new System.Drawing.Size(377, 22);
+            this.txtFilePath.Size = new System.Drawing.Size(750, 38);
             this.txtFilePath.TabIndex = 0;
-            this.txtFilePath.Text = "C:\\Users\\Vamsi.Munagala\\Downloads\\transactions.csv";
+            this.txtFilePath.Text = "C:\\Users\\vmunagal\\Downloads\\transactions.csv";
             // 
             // btnBrowse
             // 
-            this.btnBrowse.Location = new System.Drawing.Point(423, 49);
+            this.btnBrowse.Location = new System.Drawing.Point(846, 95);
+            this.btnBrowse.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.btnBrowse.Name = "btnBrowse";
-            this.btnBrowse.Size = new System.Drawing.Size(47, 23);
+            this.btnBrowse.Size = new System.Drawing.Size(94, 45);
             this.btnBrowse.TabIndex = 1;
             this.btnBrowse.Text = "...";
             this.btnBrowse.UseVisualStyleBackColor = true;
@@ -62,9 +64,10 @@
             // 
             // btnProcess
             // 
-            this.btnProcess.Location = new System.Drawing.Point(114, 177);
+            this.btnProcess.Location = new System.Drawing.Point(228, 343);
+            this.btnProcess.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.btnProcess.Name = "btnProcess";
-            this.btnProcess.Size = new System.Drawing.Size(161, 28);
+            this.btnProcess.Size = new System.Drawing.Size(322, 54);
             this.btnProcess.TabIndex = 2;
             this.btnProcess.Text = "Process";
             this.btnProcess.UseVisualStyleBackColor = true;
@@ -73,39 +76,43 @@
             // startDate
             // 
             this.startDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.startDate.Location = new System.Drawing.Point(51, 112);
+            this.startDate.Location = new System.Drawing.Point(102, 217);
+            this.startDate.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.startDate.Name = "startDate";
-            this.startDate.Size = new System.Drawing.Size(132, 22);
+            this.startDate.Size = new System.Drawing.Size(260, 38);
             this.startDate.TabIndex = 3;
             // 
             // endDate
             // 
             this.endDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.endDate.Location = new System.Drawing.Point(223, 113);
+            this.endDate.Location = new System.Drawing.Point(446, 219);
+            this.endDate.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.endDate.Name = "endDate";
-            this.endDate.Size = new System.Drawing.Size(132, 22);
+            this.endDate.Size = new System.Drawing.Size(260, 38);
             this.endDate.TabIndex = 4;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(189, 117);
+            this.label1.Location = new System.Drawing.Point(378, 227);
+            this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(28, 17);
+            this.label1.Size = new System.Drawing.Size(54, 32);
             this.label1.TabIndex = 5;
             this.label1.Text = "TO";
             // 
             // BudgetParserWinApp
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(477, 233);
+            this.ClientSize = new System.Drawing.Size(954, 451);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.endDate);
             this.Controls.Add(this.startDate);
             this.Controls.Add(this.btnProcess);
             this.Controls.Add(this.btnBrowse);
             this.Controls.Add(this.txtFilePath);
+            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.Name = "BudgetParserWinApp";
             this.Text = "Budget Parser App";
             this.ResumeLayout(false);

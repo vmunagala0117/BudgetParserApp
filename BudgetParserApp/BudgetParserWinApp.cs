@@ -40,12 +40,13 @@ namespace BudgetParserApp
                 DateTime sDate = DateTime.Parse(startDate.Text);
                 DateTime eDate = DateTime.Parse(endDate.Text);
 
-                List<Budget> getBudgetRecords = csv.GetRecords<Budget>().Where(f => f.Date >= sDate && f.Date <= eDate).ToList();
+                List<Budget> budgetRecords = csv.GetRecords<Budget>().Where(f => f.Date >= sDate && f.Date <= eDate).ToList();
 
                 //remove duplicates -- original description is bit messed up. .. cleaning up by ignoring spaces. 
-                List<Budget> budgetRecords = getBudgetRecords.GroupBy(r => new { r.AccountName, r.Amount, r.Category, r.Date, r.TransactionType, r.Description, OriginalDescription = r.OriginalDescription.Replace(" ","") })
+                /*List<Budget> budgetRecords = getBudgetRecords.GroupBy(r => new { r.AccountName, r.Amount, r.Category, r.Date, r.TransactionType, r.Description, OriginalDescription = r.OriginalDescription.Replace(" ","") })
                                                             .Select(r => r.First())
                                                             .ToList();
+                */
 
                 //Get "debit" TransType
                 List<BudgetReport> tmpBudgetDebitReportList = ProcessBudgetRecordsByTransType(budgetRecords, "debit");
@@ -86,104 +87,100 @@ namespace BudgetParserApp
                 //Add all remaining Credit purchases
                 budgetReportList.AddRange(tmpBudgetCreditReportList.FindAll(i => !i.IsProcessed));
 
-                //Dissecting Uncategorized
-                var uncategorizedBudget = budgetReportList.Find(i => i.Category.Equals("Uncategorized"));
-                if (uncategorizedBudget != null)
+                FixCategories("Shopping & Sporting Goods", budgetReportList, "Groceries", new[] { "Sam's Club", "Costco" });
+                FixCategories("Transfer", budgetReportList, "DayCare", new[] { "NANCYGKELLY", "HALLIEPETER" });
+                FixCategories("Transfer", budgetReportList, "Miscellaneous", new[] { "Venmo" });
+                FixCategories("Transfer", budgetReportList, "Mobile (ATT, Skype)", new[] { "SREELEELA" });
+                FixCategories("Groceries", budgetReportList, "Water", new[] { "DS SERVICES" });
+                FixCategories("Utilities", budgetReportList, "Mortgage", new[] { "CHARLESTON MANAGEMENT CORP" });
+                FixCategories("Credit Card Payments", budgetReportList, "Groceries", new[] { "Hello Brother Indian" });
+                FixCategories("Credit Card Payments", budgetReportList, "Room Rent", new[] { "Erenterplan" });
+
+                //print
+                Logger.LogMessagetoExcelFile(budgetReportList);
+            }
+        }
+
+        private void FixCategories(string mainCategory, List<BudgetReport> budgetReportList, string newCategory, string[] labels)
+        {
+            //Moving Sam's & Costco from "Shopping and Sporting Goods" to "Groceries"
+            //var shoppingEntries = budgetReportList.Find(i => i.Category.Equals("Shopping & Sporting Goods"));
+            var entries = budgetReportList.Find(i => i.Category.Equals(mainCategory));
+            if (entries != null)
+            {
+                if (entries.Notes != null)
                 {
-                    string[] notes = uncategorizedBudget.Notes.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] notes = entries.Notes.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < notes.Length; i++)
+                    {
+                        string[] note = notes[i].Split(new char[] { ':' });
+                        var description = String.Join(" ", note);
+                        bool ifLabelExists = Array.Exists(labels, e =>
+                        {
+                            if (description.IndexOf(e, StringComparison.OrdinalIgnoreCase) >= 0)
+                                return true;
+                            else
+                                return false;
+                        });
+                        if (ifLabelExists)
+                        {
+                            int noteIdx = 1;
+                            description = note[0];
+                            double amount = 0;
+                            //In most cases, you will amount in index location '1'...
+                            while (!Double.TryParse(note[noteIdx].Trim(), NumberStyles.Currency, CultureInfo.CreateSpecificCulture("en-US"), out amount))
+                            {
+                                description = $"{description} {note[noteIdx]}";
+                                noteIdx++;
+                            }
+                            string date = note[noteIdx + 1].Trim();
+                            string type = note[noteIdx + 2].Replace('(', ' ').Replace(')', ' ').Trim();
+                            if (type.Equals("credit"))
+                                amount = -amount;
+                            AddToReport(newCategory, amount, date, description, budgetReportList, type);
+                            RemoveNotesFromBudget(notes[i], entries);
+                            entries.TotalAmount -= amount;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void FixCategories1(string mainCategory, List<BudgetReport> budgetReportList, string newCategory, string[] labels)
+        {
+            //Moving Sam's & Costco from "Shopping and Sporting Goods" to "Groceries"
+            //var shoppingEntries = budgetReportList.Find(i => i.Category.Equals("Shopping & Sporting Goods"));
+            var entries = budgetReportList.Find(i => i.Category.Equals(mainCategory));
+            if (entries != null)
+            {
+                if (entries.Notes != null)
+                {
+                    string[] notes = entries.Notes.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
                     for (int i = 0; i < notes.Length; i++)
                     {
                         string[] note = notes[i].Split(new char[] { ':' });
                         var description = note[0];
-                        var amount = Double.Parse(note[1].Trim(), NumberStyles.Currency);
-                        string date = note[2].Trim();
-                        string type = note[3].Replace('(', ' ').Replace(')', ' ').Trim();
-                        if (type.Equals("credit"))
-                            amount = -amount;
-                        bool descriptionFound = true;
-                        string category = string.Empty;
-                        //Room Rent                    
-                        if (description.StartsWith("Edinborough T Web", StringComparison.CurrentCultureIgnoreCase))
+                        bool ifLabelExists = Array.Exists(labels, e =>
                         {
-                            category = "Room Rent";
-                        }
-                        else if (description.StartsWith("Capi", StringComparison.CurrentCultureIgnoreCase))
+                            if (description.IndexOf(e, StringComparison.OrdinalIgnoreCase) >= 0)
+                                return true;
+                            else
+                                return false;
+                        });
+                        if (ifLabelExists)
                         {
-                            category = "Credit Card Payments";
-                        }
-                        else if (description.StartsWith("Groupon", StringComparison.CurrentCultureIgnoreCase))
-                        {
-                            category = "Miscellaneous";
-                        }
-                        else if (description.StartsWith("T Mo", StringComparison.CurrentCultureIgnoreCase))
-                        {
-                            category = "Mobile (T-Mobile, Skype)";
-                        }
-                        else if (description.StartsWith("Duke", StringComparison.CurrentCultureIgnoreCase))
-                        {
-                            category = "Utilities";
-                        }
-                        else if (description.Contains("PSNC"))
-                        {
-                            category = "Utilities";
-                        }
-                        else if (description.StartsWith("V Ch", StringComparison.CurrentCultureIgnoreCase))
-                        {
-                            category = "Allowance";
-                        }
-                        else
-                        {
-                            descriptionFound = false;
-                        }
-
-                        if (descriptionFound)
-                        {
-                            AddToReport(category, amount, date, description, budgetReportList, type);
-                            RemoveNotesFromBudget(notes[i], uncategorizedBudget);
-                            uncategorizedBudget.TotalAmount -= amount;
-                        }
-                    }
-                }
-
-                //Moving Sam's & Costco from "Shopping and Sporting Goods" to "Groceries"
-                var shoppingEntries = budgetReportList.Find(i => i.Category.Equals("Shopping & Sporting Goods"));
-                if (shoppingEntries != null)
-                {
-                    if (shoppingEntries.Notes != null)
-                    {
-                        string[] notes = shoppingEntries.Notes.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-                        for (int i = 0; i < notes.Length; i++)
-                        {
-                            string[] note = notes[i].Split(new char[] { ':' });
-                            var description = note[0];
-                            var amount = Double.Parse(note[1].Trim(), NumberStyles.Currency);
-                            string date = note[2].Trim();
-                            string type = note[3].Replace('(', ' ').Replace(')', ' ').Trim();
+                            int noteIdx = 1;
+                            var amount = Double.Parse(note[noteIdx].Trim(), NumberStyles.Currency);
+                            string date = note[noteIdx + 1].Trim();
+                            string type = note[noteIdx + 2].Replace('(', ' ').Replace(')', ' ').Trim();
                             if (type.Equals("credit"))
                                 amount = -amount;
-                            bool descriptionFound = true;
-                            string category = string.Empty;
-                            if (description.StartsWith("Sam's Club", StringComparison.CurrentCultureIgnoreCase) ||
-                                description.StartsWith("Costco", StringComparison.CurrentCultureIgnoreCase))
-                            {
-                                category = "Groceries";
-                            }
-                            else
-                            {
-                                descriptionFound = false;
-                            }
-
-                            if (descriptionFound)
-                            {
-                                AddToReport(category, amount, date, description, budgetReportList, type);
-                                RemoveNotesFromBudget(notes[i], shoppingEntries);
-                                shoppingEntries.TotalAmount -= amount;
-                            }
+                            AddToReport(newCategory, amount, date, description, budgetReportList, type);
+                            RemoveNotesFromBudget(notes[i], entries);
+                            entries.TotalAmount -= amount;
                         }
                     }
                 }
-                //print
-                Logger.LogMessagetoExcelFile(budgetReportList);
             }
         }
 
