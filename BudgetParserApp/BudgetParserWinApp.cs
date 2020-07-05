@@ -88,17 +88,50 @@ namespace BudgetParserApp
                 budgetReportList.AddRange(tmpBudgetCreditReportList.FindAll(i => !i.IsProcessed));
 
                 FixCategories("Shopping & Sporting Goods", budgetReportList, "Groceries", new[] { "Sam's Club", "Costco" });
-                FixCategories("Transfer", budgetReportList, "DayCare", new[] { "NANCYGKELLY", "HALLIEPETER" });
+                FixCategories("Transfer", budgetReportList, "Daycare", new[] { "NANCYGKELLY", "HALLIEPETER" });
                 FixCategories("Transfer", budgetReportList, "Miscellaneous", new[] { "Venmo" });
-                FixCategories("Transfer", budgetReportList, "Mobile (ATT, Skype)", new[] { "SREELEELA" });
+                FixCategories("Transfer", budgetReportList, "Mobile (ATT)", new[] { "SREELEELA" });
                 FixCategories("Groceries", budgetReportList, "Water", new[] { "DS SERVICES" });
                 FixCategories("Utilities", budgetReportList, "Mortgage", new[] { "CHARLESTON MANAGEMENT CORP" });
+                FixCategories("Mortgage", budgetReportList, "Room Rent", new[] { "Jeff" });
                 FixCategories("Credit Card Payments", budgetReportList, "Groceries", new[] { "Hello Brother Indian" });
                 FixCategories("Credit Card Payments", budgetReportList, "Room Rent", new[] { "Erenterplan" });
+                FixCategories("Rental Income", budgetReportList, "Paycheck Income", new[] { "DEPOSIT MADE IN A BRANCH" });
+                FixCategories("Other Income", budgetReportList, "Rental Income", new[] { "RAVINDRA M BHEEM" });
+                FixCategories("Other Income", budgetReportList, "Paycheck Income", new[] { "INSIGHT", "BAXALTA" });
+
+                //At last calculate Expenses from the above budget list
+                CalculateTotalExpenses(budgetReportList);
 
                 //print
                 Logger.LogMessagetoExcelFile(budgetReportList);
             }
+        }
+
+        private void CalculateTotalExpenses(List<BudgetReport> budgetReportList)
+        {
+            //TotalIncome = Rental Income +  Paycheck Income + Interest Income
+            //TotalExpenses = All - TotalIncome - Credit Card Payments - Other Income - Transfer
+
+            double totalIncome = (from record in budgetReportList
+                                  where record.Category.Equals("Rental Income") ||
+                                        record.Category.Equals("Paycheck Income") ||
+                                        record.Category.Equals("Interest Income")
+                                  select record.TotalAmount).Sum();
+
+            double totalExpenses = (from record in budgetReportList
+                                    where !record.Category.Equals("Credit Card Payments") &&
+                                          !record.Category.Equals("Other Income") &&
+                                          !record.Category.Equals("Transfer") &&
+                                          !record.Category.Equals("Rental Income") &&
+                                          !record.Category.Equals("Paycheck Income") &&
+                                          !record.Category.Equals("Interest Income")
+                                    select record.TotalAmount).Sum();
+
+            //AddEmptyRecord(budgetReportList);
+            AddToReport("Total Income", Math.Abs(totalIncome), "", "", budgetReportList, "");
+            AddToReport("Total Expenses", Math.Abs(totalExpenses), "", "", budgetReportList, "");
+            AddToReport("Total Savings", Math.Abs(totalIncome) - Math.Abs(totalExpenses), "", "", budgetReportList, "");
         }
 
         private void FixCategories(string mainCategory, List<BudgetReport> budgetReportList, string newCategory, string[] labels)
@@ -133,44 +166,6 @@ namespace BudgetParserApp
                                 description = $"{description} {note[noteIdx]}";
                                 noteIdx++;
                             }
-                            string date = note[noteIdx + 1].Trim();
-                            string type = note[noteIdx + 2].Replace('(', ' ').Replace(')', ' ').Trim();
-                            if (type.Equals("credit"))
-                                amount = -amount;
-                            AddToReport(newCategory, amount, date, description, budgetReportList, type);
-                            RemoveNotesFromBudget(notes[i], entries);
-                            entries.TotalAmount -= amount;
-                        }
-                    }
-                }
-            }
-        }
-
-        private void FixCategories1(string mainCategory, List<BudgetReport> budgetReportList, string newCategory, string[] labels)
-        {
-            //Moving Sam's & Costco from "Shopping and Sporting Goods" to "Groceries"
-            //var shoppingEntries = budgetReportList.Find(i => i.Category.Equals("Shopping & Sporting Goods"));
-            var entries = budgetReportList.Find(i => i.Category.Equals(mainCategory));
-            if (entries != null)
-            {
-                if (entries.Notes != null)
-                {
-                    string[] notes = entries.Notes.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-                    for (int i = 0; i < notes.Length; i++)
-                    {
-                        string[] note = notes[i].Split(new char[] { ':' });
-                        var description = note[0];
-                        bool ifLabelExists = Array.Exists(labels, e =>
-                        {
-                            if (description.IndexOf(e, StringComparison.OrdinalIgnoreCase) >= 0)
-                                return true;
-                            else
-                                return false;
-                        });
-                        if (ifLabelExists)
-                        {
-                            int noteIdx = 1;
-                            var amount = Double.Parse(note[noteIdx].Trim(), NumberStyles.Currency);
                             string date = note[noteIdx + 1].Trim();
                             string type = note[noteIdx + 2].Replace('(', ' ').Replace(')', ' ').Trim();
                             if (type.Equals("credit"))
@@ -251,13 +246,19 @@ namespace BudgetParserApp
                 isNewCategory = true;
             }
             budgetCategory.TotalAmount += amount;
-            StringBuilder sBuilder = new StringBuilder();
             if (type != null)
                 budgetCategory.TransType = type;
-            budgetCategory.Notes += sBuilder.AppendLine(formatNotes(budgetCategory.TransType, description, date, amount).ToString()).ToString();
+            if (!String.IsNullOrEmpty(description) && !String.IsNullOrEmpty(date))
+            {
+                StringBuilder sBuilder = new StringBuilder();
+                budgetCategory.Notes += sBuilder.AppendLine(formatNotes(budgetCategory.TransType, description, date, amount).ToString()).ToString();
+            }
             if (isNewCategory) report.Add(budgetCategory);
         }
 
-
+        private void AddEmptyRecord(List<BudgetReport> report)
+        {
+            report.Add(new BudgetReport());            
+        }
     }
 }
