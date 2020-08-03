@@ -93,7 +93,9 @@ namespace BudgetParserApp
                 FixCategories("Transfer", budgetReportList, "Mobile (ATT)", new[] { "SREELEELA" });
                 FixCategories("Groceries", budgetReportList, "Water", new[] { "DS SERVICES" });
                 FixCategories("Utilities", budgetReportList, "Mortgage", new[] { "CHARLESTON MANAGEMENT CORP" });
-                FixCategories("Mortgage", budgetReportList, "Room Rent", new[] { "Jeff" });
+                FixCategories("Utilities", budgetReportList, "Daycare", new[] { "ADVENTURES PRESCHOOL" });
+                FixCategories("Mortgage", budgetReportList, "Daycare", new[] { "ADVENTURES PRESCHOOL" });
+                FixCategories("Mortgage", budgetReportList, "Room Rent", new[] { "Jeff", "Elan" });
                 FixCategories("Credit Card Payments", budgetReportList, "Groceries", new[] { "Hello Brother Indian" });
                 FixCategories("Credit Card Payments", budgetReportList, "Room Rent", new[] { "Erenterplan" });
                 FixCategories("Rental Income", budgetReportList, "Paycheck Income", new[] { "DEPOSIT MADE IN A BRANCH" });
