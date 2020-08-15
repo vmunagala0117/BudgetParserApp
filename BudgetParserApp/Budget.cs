@@ -43,4 +43,30 @@ namespace BudgetParserApp
         public bool IsProcessed = false;
 
     }
+
+    public class DistinctItemComparer : IEqualityComparer<Budget>
+    {
+
+        public bool Equals(Budget x, Budget y)
+        {
+            return x.Date == y.Date &&
+                x.Description == y.Description &&
+                x.OriginalDescription == y.OriginalDescription &&
+                x.TransactionType == y.TransactionType &&
+                x.Category == y.Category &&
+                x.AccountName == y.AccountName &&
+                x.Amount == y.Amount;
+        }
+
+        public int GetHashCode(Budget obj)
+        {
+            return obj.Date.GetHashCode() ^
+                obj.Description.GetHashCode() ^
+                obj.OriginalDescription.GetHashCode() ^
+                obj.TransactionType.GetHashCode() ^
+                obj.Category.GetHashCode() ^
+                obj.AccountName.GetHashCode() ^
+                obj.Amount.GetHashCode();
+        }
+    }
 }

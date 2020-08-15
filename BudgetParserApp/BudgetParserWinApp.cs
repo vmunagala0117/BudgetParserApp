@@ -40,7 +40,7 @@ namespace BudgetParserApp
                 DateTime sDate = DateTime.Parse(startDate.Text);
                 DateTime eDate = DateTime.Parse(endDate.Text);
 
-                List<Budget> budgetRecords = csv.GetRecords<Budget>().Where(f => f.Date >= sDate && f.Date <= eDate).ToList();
+                List<Budget> budgetRecords = csv.GetRecords<Budget>().Where(f => f.Date >= sDate && f.Date <= eDate).Distinct(new DistinctItemComparer()).ToList();
 
                 //remove duplicates -- original description is bit messed up. .. cleaning up by ignoring spaces. 
                 /*List<Budget> budgetRecords = getBudgetRecords.GroupBy(r => new { r.AccountName, r.Amount, r.Category, r.Date, r.TransactionType, r.Description, OriginalDescription = r.OriginalDescription.Replace(" ","") })
@@ -260,7 +260,7 @@ namespace BudgetParserApp
 
         private void AddEmptyRecord(List<BudgetReport> report)
         {
-            report.Add(new BudgetReport());            
+            report.Add(new BudgetReport());
         }
     }
 }
