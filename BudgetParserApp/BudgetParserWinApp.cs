@@ -92,6 +92,8 @@ namespace BudgetParserApp
                 FixCategories("Transfer", budgetReportList, "Miscellaneous", new[] { "Venmo" });
                 FixCategories("Transfer", budgetReportList, "Mobile (ATT)", new[] { "SREELEELA" });
                 FixCategories("Groceries", budgetReportList, "Water", new[] { "DS SERVICES" });
+                FixCategories("Restaurants", budgetReportList, "Water", new[] { "WATER - COFFEE DELIVERY" });
+                FixCategories("Restaurants", budgetReportList, "Groceries", new[] { "CRESCENT RI" });
                 FixCategories("Utilities", budgetReportList, "Mortgage", new[] { "CHARLESTON MANAGEMENT CORP" });
                 FixCategories("Utilities", budgetReportList, "Daycare", new[] { "ADVENTURES PRESCHOOL" });
                 FixCategories("Mortgage", budgetReportList, "Daycare", new[] { "ADVENTURES PRESCHOOL" });
@@ -136,11 +138,11 @@ namespace BudgetParserApp
             AddToReport("Total Savings", Math.Abs(totalIncome) - Math.Abs(totalExpenses), "", "", budgetReportList, "");
         }
 
-        private void FixCategories(string mainCategory, List<BudgetReport> budgetReportList, string newCategory, string[] labels)
+        private void FixCategories(string existingCategory, List<BudgetReport> budgetReportList, string newCategory, string[] labels)
         {
             //Moving Sam's & Costco from "Shopping and Sporting Goods" to "Groceries"
             //var shoppingEntries = budgetReportList.Find(i => i.Category.Equals("Shopping & Sporting Goods"));
-            var entries = budgetReportList.Find(i => i.Category.Equals(mainCategory));
+            var entries = budgetReportList.Find(i => i.Category.Equals(existingCategory));
             if (entries != null)
             {
                 if (entries.Notes != null)
