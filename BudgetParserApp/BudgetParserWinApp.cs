@@ -89,8 +89,14 @@ namespace BudgetParserApp
 
                 FixCategories("Shopping & Sporting Goods", budgetReportList, "Groceries", new[] { "Sam's Club", "Costco" });
                 FixCategories("Transfer", budgetReportList, "Daycare", new[] { "NANCYGKELLY", "HALLIEPETER" });
-                FixCategories("Transfer", budgetReportList, "Miscellaneous", new[] { "Venmo" });
+                FixCategories("Transfer", budgetReportList, "Shopping & Sporting Goods", new[] { "Venmo" });
                 FixCategories("Transfer", budgetReportList, "Mobile (ATT)", new[] { "SREELEELA" });
+                FixCategories("Transfer", budgetReportList, "Restaurants", new[] { "ZELLE TO S PROMILA" });
+                FixCategories("Transfer", budgetReportList, "Mortgage", new[] { "ZELLE TO AHUJA APARNA" });
+                FixCategories("Transfer", budgetReportList, "India Investment", new[] { "RIAMONEYTRANSFER","Xoom" });
+                FixCategories("Transfer", budgetReportList, "Car Payments", new[] { "- JPMorgan Chase Ext" });
+                FixCategories("Transfer", budgetReportList, "Education", new[] { "MCPHS" });
+                FixCategories("Transfer", budgetReportList, "Daycare", new[] { "ZELLE TO GANNU RAJANI" });
                 FixCategories("Groceries", budgetReportList, "Water", new[] { "DS SERVICES" });
                 FixCategories("Restaurants", budgetReportList, "Water", new[] { "WATER - COFFEE DELIVERY" });
                 FixCategories("Restaurants", budgetReportList, "Groceries", new[] { "CRESCENT RI" });
@@ -103,6 +109,7 @@ namespace BudgetParserApp
                 FixCategories("Rental Income", budgetReportList, "Paycheck Income", new[] { "DEPOSIT MADE IN A BRANCH" });
                 FixCategories("Other Income", budgetReportList, "Rental Income", new[] { "RAVINDRA M BHEEM" });
                 FixCategories("Other Income", budgetReportList, "Paycheck Income", new[] { "INSIGHT", "BAXALTA" });
+                FixCategories("Service & Parts", budgetReportList, "Gas & Fuel", new[] { "Auto Clinic Inc" });
 
                 //At last calculate Expenses from the above budget list
                 CalculateTotalExpenses(budgetReportList);
