@@ -90,11 +90,14 @@ namespace BudgetParserApp
                 FixCategories("Shopping & Sporting Goods", budgetReportList, "Groceries", new[] { "Sam's Club", "Costco" });
                 FixCategories("Transfer", budgetReportList, "Daycare", new[] { "NANCYGKELLY", "HALLIEPETER" });
                 FixCategories("Transfer", budgetReportList, "Shopping & Sporting Goods", new[] { "Venmo" });
+                FixCategories("Entertainment", budgetReportList, "Fun & Getaways", new[] { "TICKETSATWORK.COM" });
                 FixCategories("Transfer", budgetReportList, "Mobile (ATT)", new[] { "SREELEELA" });
-                FixCategories("Transfer", budgetReportList, "Restaurants", new[] { "ZELLE TO S PROMILA" });
-                FixCategories("Transfer", budgetReportList, "Mortgage", new[] { "ZELLE TO AHUJA APARNA" });
+                FixCategories("Transfer", budgetReportList, "Food Services", new[] { "ZELLE TO S PROMILA" });
+                FixCategories("Transfer", budgetReportList, "Miscellaneous", new[] { "ZELLE Debit", "#NAME?" });
+                FixCategories("Restaurants", budgetReportList, "Food Services", new[] { "Food" });
+                FixCategories("Transfer", budgetReportList, "Mortgage", new[] { "ZELLE TO AHUJA APARNA", "BLOSSOM REAL" });
                 FixCategories("Transfer", budgetReportList, "India Investment", new[] { "RIAMONEYTRANSFER","Xoom", "ZELLE TO KONDA KRISHNA" });
-                FixCategories("Transfer", budgetReportList, "Car Payments", new[] { "- JPMorgan Chase Ext" });
+                FixCategories("Transfer", budgetReportList, "Car Payment", new[] { "- JPMorgan Chase Ext" });
                 FixCategories("Transfer", budgetReportList, "Education", new[] { "MCPHS" });
                 FixCategories("Transfer", budgetReportList, "Daycare", new[] { "ZELLE TO GANNU RAJANI" });
                 FixCategories("Groceries", budgetReportList, "Water", new[] { "DS SERVICES" });
@@ -108,8 +111,11 @@ namespace BudgetParserApp
                 FixCategories("Credit Card Payments", budgetReportList, "Room Rent", new[] { "Erenterplan" });
                 FixCategories("Rental Income", budgetReportList, "Paycheck Income", new[] { "DEPOSIT MADE IN A BRANCH" });
                 FixCategories("Other Income", budgetReportList, "Rental Income", new[] { "RAVINDRA M BHEEM" });
-                FixCategories("Other Income", budgetReportList, "Paycheck Income", new[] { "INSIGHT", "BAXALTA" });
+                FixCategories("Other Income", budgetReportList, "Groceries", new[] { "Costco Whse" });
+                FixCategories("Other Income", budgetReportList, "Paycheck Income", new[] { "INSIGHT", "BAXALTA", "TAKEDA DEVELOPME DIRECT DEP", "Check Deposit" });
                 FixCategories("Service & Parts", budgetReportList, "Gas & Fuel", new[] { "Auto Clinic Inc" });
+                FixCategories("Miscellaneous", budgetReportList, "Gas & Fuel", new[] { "Auto Clinic Inc" });
+                FixCategories("ATM Withdrawal", budgetReportList, "Car Payment", new[] { "TRANSFER TO LOAN 141" });
 
                 //At last calculate Expenses from the above budget list
                 CalculateTotalExpenses(budgetReportList);
