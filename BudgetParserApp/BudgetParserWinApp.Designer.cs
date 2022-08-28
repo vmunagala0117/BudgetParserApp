@@ -1,4 +1,6 @@
-﻿namespace BudgetParserApp
+﻿using System;
+
+namespace BudgetParserApp
 {
     partial class BudgetParserWinApp
     {
@@ -45,7 +47,7 @@
             // txtFilePath
             // 
             this.txtFilePath.Location = new System.Drawing.Point(62, 95);
-            this.txtFilePath.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.txtFilePath.Margin = new System.Windows.Forms.Padding(6);
             this.txtFilePath.Name = "txtFilePath";
             this.txtFilePath.Size = new System.Drawing.Size(750, 38);
             this.txtFilePath.TabIndex = 0;
@@ -54,7 +56,7 @@
             // btnBrowse
             // 
             this.btnBrowse.Location = new System.Drawing.Point(846, 95);
-            this.btnBrowse.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.btnBrowse.Margin = new System.Windows.Forms.Padding(6);
             this.btnBrowse.Name = "btnBrowse";
             this.btnBrowse.Size = new System.Drawing.Size(94, 45);
             this.btnBrowse.TabIndex = 1;
@@ -65,7 +67,7 @@
             // btnProcess
             // 
             this.btnProcess.Location = new System.Drawing.Point(228, 343);
-            this.btnProcess.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.btnProcess.Margin = new System.Windows.Forms.Padding(6);
             this.btnProcess.Name = "btnProcess";
             this.btnProcess.Size = new System.Drawing.Size(322, 54);
             this.btnProcess.TabIndex = 2;
@@ -75,21 +77,24 @@
             // 
             // startDate
             // 
+            this.startDate.CalendarMonthBackground = System.Drawing.Color.Wheat;
             this.startDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.startDate.Location = new System.Drawing.Point(102, 217);
-            this.startDate.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.startDate.Margin = new System.Windows.Forms.Padding(6);
             this.startDate.Name = "startDate";
             this.startDate.Size = new System.Drawing.Size(260, 38);
             this.startDate.TabIndex = 3;
+            this.startDate.Value = new DateTime(System.DateTime.Now.Year, System.DateTime.Now.Month, 1);
             // 
             // endDate
             // 
             this.endDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.endDate.Location = new System.Drawing.Point(446, 219);
-            this.endDate.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.endDate.Margin = new System.Windows.Forms.Padding(6);
             this.endDate.Name = "endDate";
             this.endDate.Size = new System.Drawing.Size(260, 38);
             this.endDate.TabIndex = 4;
+            this.endDate.Value = new DateTime(System.DateTime.Now.Year, System.DateTime.Now.Month, DateTime.DaysInMonth(System.DateTime.Now.Year, System.DateTime.Now.Month));
             // 
             // label1
             // 
@@ -112,7 +117,7 @@
             this.Controls.Add(this.btnProcess);
             this.Controls.Add(this.btnBrowse);
             this.Controls.Add(this.txtFilePath);
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "BudgetParserWinApp";
             this.Text = "Budget Parser App";
             this.ResumeLayout(false);

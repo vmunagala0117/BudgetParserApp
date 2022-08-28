@@ -38,6 +38,8 @@ namespace BudgetParserApp
         public string Category { get; set; }
         public double TotalAmount { get; set; }
         public string Notes { get; set; }
+        public string Description { get; set; }
+        public string AccountName { get; set; }
         public string TransType { get; set; }
 
         public bool IsProcessed = false;
@@ -46,26 +48,51 @@ namespace BudgetParserApp
 
     public class DistinctItemComparer : IEqualityComparer<Budget>
     {
+        public bool Equals(Budget x, Budget y)
+        {
+            return x.Date == y.Date &&
+                x.Description.Replace(" ", string.Empty) == y.Description.Replace(" ", string.Empty) &&
+                x.OriginalDescription.Replace(" ", string.Empty) == y.OriginalDescription.Replace(" ", string.Empty) &&
+                x.TransactionType == y.TransactionType &&
+                x.Category.Replace(" ", string.Empty) == y.Category.Replace(" ", string.Empty) &&
+                x.AccountName.Replace(" ", string.Empty) == y.AccountName.Replace(" ", string.Empty) &&
+                x.Amount == y.Amount;
+        }
+
+        public int GetHashCode(Budget obj)
+        {
+            
+            return obj.Date.GetHashCode() ^
+                obj.Description.Replace(" ", string.Empty).GetHashCode() ^
+                obj.OriginalDescription.Replace(" ", string.Empty).GetHashCode() ^
+                obj.TransactionType.GetHashCode() ^
+                obj.Category.Replace(" ", string.Empty).GetHashCode() ^
+                obj.AccountName.Replace(" ", string.Empty).GetHashCode() ^
+                obj.Amount.GetHashCode();
+        }
+    }
+
+    //Ignoring Account Name
+    public class DistinctItemComparerV2 : IEqualityComparer<Budget>
+    {
 
         public bool Equals(Budget x, Budget y)
         {
             return x.Date == y.Date &&
-                x.Description == y.Description &&
-                x.OriginalDescription == y.OriginalDescription &&
+                x.Description.Replace(" ", string.Empty) == y.Description.Replace(" ", string.Empty) &&
+                x.OriginalDescription.Replace(" ", string.Empty) == y.OriginalDescription.Replace(" ", string.Empty) &&
                 x.TransactionType == y.TransactionType &&
-                x.Category == y.Category &&
-                x.AccountName == y.AccountName &&
+                x.Category.Replace(" ", string.Empty) == y.Category.Replace(" ", string.Empty) &&
                 x.Amount == y.Amount;
         }
 
         public int GetHashCode(Budget obj)
         {
             return obj.Date.GetHashCode() ^
-                obj.Description.GetHashCode() ^
-                obj.OriginalDescription.GetHashCode() ^
+                obj.Description.Replace(" ", string.Empty).GetHashCode() ^
+                obj.OriginalDescription.Replace(" ", string.Empty).GetHashCode() ^
                 obj.TransactionType.GetHashCode() ^
-                obj.Category.GetHashCode() ^
-                obj.AccountName.GetHashCode() ^
+                obj.Category.Replace(" ", string.Empty).GetHashCode() ^
                 obj.Amount.GetHashCode();
         }
     }

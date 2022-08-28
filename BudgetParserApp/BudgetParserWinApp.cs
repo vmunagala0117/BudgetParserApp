@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Configuration;
 using System.Globalization;
+using System.Reflection;
 
 namespace BudgetParserApp
 {
@@ -40,13 +41,23 @@ namespace BudgetParserApp
                 DateTime sDate = DateTime.Parse(startDate.Text);
                 DateTime eDate = DateTime.Parse(endDate.Text);
 
-                List<Budget> budgetRecords = csv.GetRecords<Budget>().Where(f => f.Date >= sDate && f.Date <= eDate).Distinct(new DistinctItemComparer()).ToList();
+                /*
+                 * 
+                 * Follow the ETL process
+                 * 
+                 */
 
-                //remove duplicates -- original description is bit messed up. .. cleaning up by ignoring spaces. 
-                /*List<Budget> budgetRecords = getBudgetRecords.GroupBy(r => new { r.AccountName, r.Amount, r.Category, r.Date, r.TransactionType, r.Description, OriginalDescription = r.OriginalDescription.Replace(" ","") })
-                                                            .Select(r => r.First())
-                                                            .ToList();
-                */
+                //1. Extract
+                //Get all records b/w the time range
+                List<Budget> budgetRecords = csv.GetRecords<Budget>().Where(f => f.Date >= sDate && f.Date <= eDate).ToList();
+
+                //2. Transform
+                //Perform some transformations
+                budgetRecords = Transform(budgetRecords);
+                //Perform Cleanup of Budget Records
+                budgetRecords = DoCleanup(budgetRecords);
+                
+                //3. Load
 
                 //Get "debit" TransType
                 List<BudgetReport> tmpBudgetDebitReportList = ProcessBudgetRecordsByTransType(budgetRecords, "debit");
@@ -87,6 +98,7 @@ namespace BudgetParserApp
                 //Add all remaining Credit purchases
                 budgetReportList.AddRange(tmpBudgetCreditReportList.FindAll(i => !i.IsProcessed));
 
+                /*
                 FixCategories("Shopping & Sporting Goods", budgetReportList, "Groceries", new[] { "Sam's Club", "Costco" });
                 FixCategories("Transfer", budgetReportList, "Daycare", new[] { "NANCYGKELLY", "HALLIEPETER" });
                 FixCategories("Transfer", budgetReportList, "Shopping & Sporting Goods", new[] { "Venmo" });
@@ -96,9 +108,10 @@ namespace BudgetParserApp
                 FixCategories("Transfer", budgetReportList, "Miscellaneous", new[] { "ZELLE Debit", "#NAME?" });
                 FixCategories("Restaurants", budgetReportList, "Food Services", new[] { "Food" });
                 FixCategories("Transfer", budgetReportList, "Mortgage", new[] { "ZELLE TO AHUJA APARNA", "BLOSSOM REAL" });
-                FixCategories("Transfer", budgetReportList, "India Investment", new[] { "RIAMONEYTRANSFER","Xoom", "ZELLE TO KONDA KRISHNA" });
+                FixCategories("Transfer", budgetReportList, "India Investment", new[] { "RIAMONEYTRANSFER", "Xoom", "ZELLE TO KONDA KRISHNA" });
                 FixCategories("Transfer", budgetReportList, "Car Payment", new[] { "- JPMorgan Chase Ext" });
                 FixCategories("Transfer", budgetReportList, "Education", new[] { "MCPHS" });
+                FixCategories("Fun & Getaways", budgetReportList, "Education", new[] { "WATERTOWN MA PAR" });
                 FixCategories("Transfer", budgetReportList, "Daycare", new[] { "ZELLE TO GANNU RAJANI" });
                 FixCategories("Groceries", budgetReportList, "Water", new[] { "DS SERVICES" });
                 FixCategories("Restaurants", budgetReportList, "Water", new[] { "WATER - COFFEE DELIVERY" });
@@ -114,14 +127,127 @@ namespace BudgetParserApp
                 FixCategories("Other Income", budgetReportList, "Groceries", new[] { "Costco Whse" });
                 FixCategories("Other Income", budgetReportList, "Paycheck Income", new[] { "INSIGHT", "BAXALTA", "TAKEDA DEVELOPME DIRECT DEP", "Check Deposit" });
                 FixCategories("Service & Parts", budgetReportList, "Gas & Fuel", new[] { "Auto Clinic Inc" });
-                FixCategories("Miscellaneous", budgetReportList, "Gas & Fuel", new[] { "Auto Clinic Inc" });
+                FixCategories("Miscellaneous", budgetReportList, "Gas & Fuel", new[] { "Auto Clinic Inc", "Auto Clinic" });
+                FixCategories("Miscellaneous", budgetReportList, "Restaurants", new[] { "Good To Go, Inc." });
                 FixCategories("ATM Withdrawal", budgetReportList, "Car Payment", new[] { "TRANSFER TO LOAN 141" });
-
+                
                 //At last calculate Expenses from the above budget list
                 CalculateTotalExpenses(budgetReportList);
-
+                */
                 //print
                 Logger.LogMessagetoExcelFile(budgetReportList);
+            }
+        }
+
+        private List<Budget> DoCleanup(List<Budget> budgetEntries)
+        {
+            CleanupEntries(budgetEntries, "Transfer", accountName: "Checking-3256", description: "Morgan Stanley");
+            CleanupEntries(budgetEntries, "Transfer", accountName: "Checking", description: "Money Market");
+            CleanupEntries(budgetEntries, "Transfer", accountName: "Checking", description: "Transfer to Savings");
+            CleanupEntries(budgetEntries, "Transfer", accountName: "Wells Fargo", description: "RECURRING TRANSFER TO CHITIKIREDDI V");
+            CleanupEntries(budgetEntries, "Transfer", accountName: "Wells Fargo", description: "RECURRING TRANSFER FROM CHITIKIREDDI V");
+
+            CleanupEntries(budgetEntries, "Transfer", accountName: "Savings Plus Account");
+            CleanupEntries(budgetEntries, "Transfer", accountName: "Day-to-Day Savings");
+            CleanupEntries(budgetEntries, "Transfer", accountName: "Accelerate Savings");
+            CleanupEntries(budgetEntries, "Transfer", accountName: "SAVINGS Account");
+            CleanupEntries(budgetEntries, "Transfer", accountName: "Primary Account");
+
+            CleanupEntries(budgetEntries, "Transfer", description: "ONLINE TRANSFER TO CAPITAL ONE");
+            CleanupEntries(budgetEntries, "Transfer", description: "ZELLE TO MUNAGALA VAMSI");
+            CleanupEntries(budgetEntries, "Transfer", description: "ZELLE FROM VAMSI MUNAGALA");
+
+            CleanupEntries(budgetEntries, "Dividend & Cap Gains");
+            CleanupEntries(budgetEntries, "Investments");
+            CleanupEntries(budgetEntries, "Trade Commissions");
+
+            CleanupEntries(budgetEntries, "Credit Card Payment");
+
+            //Get "Distinct" records. Often there are duplicates
+            budgetEntries = budgetEntries.Distinct(new DistinctItemComparer()).ToList();
+
+            return budgetEntries;
+        }
+        
+        private List<Budget> Transform(List<Budget> budgetEntries)
+        {
+            //Modify Columns
+            ModifyColumn(budgetEntries, "AccountName", "Checking", "Checking-3256");
+            //Modify Categories
+            ModifyCategories(budgetEntries, newCategory: "Childcare", existingCategory:"Tuition", accountNames: new string[] { "Checking" }, descriptions: new string[] { "SMART LLC" });
+            ModifyCategories(budgetEntries, newCategory: "Childcare", descriptions: new string[] { "ADVENTURES PRESCHOOL", "ZELLE TO BUDANG" });
+            ModifyCategories(budgetEntries, newCategory: "529k", accountNames: new string[] { "Wells Fargo" }, descriptions: new string[] { "Morgan Stanley" });
+            ModifyCategories(budgetEntries, newCategory: "Groceries", descriptions: new string[] { "COSTCO COM" });
+            ModifyCategories(budgetEntries, newCategory: "Gas", descriptions: new string[] { "NATIONAL GRID NE" });
+            ModifyCategories(budgetEntries, newCategory: "Fuel", descriptions: new string[] { "AA AUTO CLINIC" });
+            ModifyCategories(budgetEntries, newCategory: "Service & Parts", descriptions: new string[] { "Car Wash" });
+            ModifyCategories(budgetEntries, newCategory: "Electricity", existingCategory: "Utilities", descriptions: new string[] { "EVERSOUCE" });
+            ModifyCategories(budgetEntries, newCategory: "Auto Payment", descriptions: new string[] { "MONTHLY AUTO NEW PAYMENT" });
+
+            ModifyCategories(budgetEntries, newCategory: "Food Services", descriptions: new string[] { "RASHMI SHAH", "ZELLE TO SONIA" });
+
+            ModifyCategories(budgetEntries, newCategory: "Others", descriptions: new string[] { "SRIKANTH KAM",
+                                                                                                "SAKAEM LOGISTICS",
+                                                                                                "Zelle Debit"});
+            return budgetEntries;
+        
+        }
+
+        private void ModifyColumn(List<Budget> budgetEntries, string propertyName, string existingValue, string newValue)
+        {
+            if (propertyName == "AccountName")
+            {
+                var entries = budgetEntries.Where(a => a.AccountName == existingValue).ToList();
+                entries.ForEach(i => i.AccountName = newValue);
+            }            
+        }
+
+        private void ModifyCategories(List<Budget> budgetEntries, string newCategory, string existingCategory = null,  string[] accountNames = null, string[] descriptions = null)
+        {   
+            var tmpAccountNames = accountNames?.ToList();
+            var tmpDescriptions = descriptions?.ToList();
+            var filterBudgetList = (existingCategory != null) ? budgetEntries.Where(b => b.Category == existingCategory) : budgetEntries;
+
+            if (descriptions != null && accountNames != null)
+            {
+                filterBudgetList = filterBudgetList.Where(b => tmpDescriptions.Any(description => b.Description.Contains(description)) && tmpAccountNames.Any(accountName => b.AccountName.Contains(accountName)));
+            }
+            else if (descriptions != null)
+            {
+                filterBudgetList = filterBudgetList.Where(b => tmpDescriptions.Any(description => b.Description.Contains(description)));
+
+            }
+            else if (accountNames != null)
+            {
+                filterBudgetList = filterBudgetList.Where(b => tmpAccountNames.Any(accountName => b.AccountName.Contains(accountName)));
+            }
+            foreach (var item in filterBudgetList.ToList())
+            {
+                budgetEntries.Find(i => i == item).Category = newCategory;
+            }
+
+        }
+
+        private void CleanupEntries(List<Budget> budgetEntries, string category, string accountName = null, string description = null)
+        {            
+
+            var filterBudgetList = budgetEntries.Where(b => b.Category == category);
+            if (description != null && accountName != null)
+            {
+                filterBudgetList = filterBudgetList.Where(b => b.Description.Contains(description) && b.AccountName.Contains(accountName));
+            }
+            else if (description != null)
+            {
+                filterBudgetList = filterBudgetList.Where(b => b.Description.Contains(description));
+
+            }
+            else if (accountName != null)
+            {
+                filterBudgetList = filterBudgetList.Where(b => b.AccountName.Contains(accountName));
+            }
+            foreach (var item in filterBudgetList.ToList())
+            {
+                budgetEntries.Remove(item);
             }
         }
 
@@ -276,6 +402,6 @@ namespace BudgetParserApp
         private void AddEmptyRecord(List<BudgetReport> report)
         {
             report.Add(new BudgetReport());
-        }
+        }        
     }
 }
