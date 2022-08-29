@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -58,6 +59,7 @@ namespace BudgetParserApp
             // Establish column headings in cells A1 and B1.
             workSheet.Cells[1, "A"] = "Category";
             workSheet.Cells[1, "B"] = "Total Amount";
+            workSheet.Cells[1, "C"] = "Potential Duplicates";
 
             var row = 1;
             foreach (var budget in report)
@@ -65,6 +67,11 @@ namespace BudgetParserApp
                 row++;
                 workSheet.Cells[row, "A"] = budget.Category;
                 workSheet.Cells[row, "B"] = budget.TotalAmount;
+                workSheet.Cells[row, "C"] = budget.TotalPotentialDuplicates;
+                if (budget.TotalPotentialDuplicates > 0)
+                {
+                    ((Excel.Range)workSheet.Cells[row, "C"]).Interior.Color = Excel.XlRgbColor.rgbLightSteelBlue;
+                }
 
                 if (!String.IsNullOrEmpty(budget.Notes))
                 {

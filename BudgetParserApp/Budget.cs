@@ -17,6 +17,7 @@ namespace BudgetParserApp
         public string TransactionType { get; set; }
         public string Category { get; set; }
         public string AccountName { get; set; }
+        public bool IsAPotentialDuplicate { get; set; }
     }
 
     public sealed class BudgetClassMap : CsvClassMap<Budget>
@@ -41,9 +42,9 @@ namespace BudgetParserApp
         public string Description { get; set; }
         public string AccountName { get; set; }
         public string TransType { get; set; }
+        public int TotalPotentialDuplicates { get; set; }
 
         public bool IsProcessed = false;
-
     }
 
     public class DistinctItemComparer : IEqualityComparer<Budget>

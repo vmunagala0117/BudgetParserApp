@@ -37,6 +37,7 @@ namespace BudgetParserApp
             this.startDate = new System.Windows.Forms.DateTimePicker();
             this.endDate = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
+            this.chkRemoveIdentifiedDuplicates = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // openFileDialog
@@ -66,7 +67,7 @@ namespace BudgetParserApp
             // 
             // btnProcess
             // 
-            this.btnProcess.Location = new System.Drawing.Point(228, 343);
+            this.btnProcess.Location = new System.Drawing.Point(211, 398);
             this.btnProcess.Margin = new System.Windows.Forms.Padding(6);
             this.btnProcess.Name = "btnProcess";
             this.btnProcess.Size = new System.Drawing.Size(322, 54);
@@ -84,7 +85,7 @@ namespace BudgetParserApp
             this.startDate.Name = "startDate";
             this.startDate.Size = new System.Drawing.Size(260, 38);
             this.startDate.TabIndex = 3;
-            this.startDate.Value = new DateTime(System.DateTime.Now.Year, System.DateTime.Now.Month, 1);
+            this.startDate.Value = new System.DateTime(2022, 8, 1, 0, 0, 0, 0);
             // 
             // endDate
             // 
@@ -94,7 +95,7 @@ namespace BudgetParserApp
             this.endDate.Name = "endDate";
             this.endDate.Size = new System.Drawing.Size(260, 38);
             this.endDate.TabIndex = 4;
-            this.endDate.Value = new DateTime(System.DateTime.Now.Year, System.DateTime.Now.Month, DateTime.DaysInMonth(System.DateTime.Now.Year, System.DateTime.Now.Month));
+            this.endDate.Value = new System.DateTime(2022, 8, 31, 0, 0, 0, 0);
             // 
             // label1
             // 
@@ -106,11 +107,22 @@ namespace BudgetParserApp
             this.label1.TabIndex = 5;
             this.label1.Text = "TO";
             // 
+            // chkRemoveIdentifiedDuplicates
+            // 
+            this.chkRemoveIdentifiedDuplicates.AutoSize = true;
+            this.chkRemoveIdentifiedDuplicates.Location = new System.Drawing.Point(481, 306);
+            this.chkRemoveIdentifiedDuplicates.Name = "chkRemoveIdentifiedDuplicates";
+            this.chkRemoveIdentifiedDuplicates.Size = new System.Drawing.Size(423, 36);
+            this.chkRemoveIdentifiedDuplicates.TabIndex = 6;
+            this.chkRemoveIdentifiedDuplicates.Text = "Remove Identified Duplicates";
+            this.chkRemoveIdentifiedDuplicates.UseVisualStyleBackColor = true;
+            // 
             // BudgetParserWinApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(954, 451);
+            this.ClientSize = new System.Drawing.Size(989, 528);
+            this.Controls.Add(this.chkRemoveIdentifiedDuplicates);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.endDate);
             this.Controls.Add(this.startDate);
@@ -134,6 +146,7 @@ namespace BudgetParserApp
         private System.Windows.Forms.DateTimePicker startDate;
         private System.Windows.Forms.DateTimePicker endDate;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox chkRemoveIdentifiedDuplicates;
     }
 }
 
