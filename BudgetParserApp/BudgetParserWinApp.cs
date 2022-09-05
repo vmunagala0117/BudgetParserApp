@@ -64,6 +64,9 @@ namespace BudgetParserApp
             CleanupEntries(budgetEntries, "Transfer", accountName: "Checking-3256", description: "Morgan Stanley");
             CleanupEntries(budgetEntries, "Transfer", accountName: "Checking", description: "Money Market");
             CleanupEntries(budgetEntries, "Transfer", accountName: "Checking", description: "Transfer to Savings");
+            CleanupEntries(budgetEntries, "Transfer", accountName: "Checking", description: "Transfer From Savings");
+            CleanupEntries(budgetEntries, "Transfer", accountName: "Wells Fargo", description: "TRANSFER CREDIT FROM");
+            CleanupEntries(budgetEntries, "Transfer", accountName: "Wells Fargo", description: "TRANSFER CREDIT TO");
             CleanupEntries(budgetEntries, "Transfer", accountName: "Wells Fargo", description: "RECURRING TRANSFER TO CHITIKIREDDI V");
             CleanupEntries(budgetEntries, "Transfer", accountName: "Wells Fargo", description: "RECURRING TRANSFER FROM CHITIKIREDDI V");            
             
@@ -141,20 +144,21 @@ namespace BudgetParserApp
             ModifyCategories(budgetEntries, newCategory: "Vidya Paycheck", existingCategory: "Paycheck", accountNames: new string[] { "Checking" }, descriptions: new string[] { "TAKEDA DEVELOPME DIRECT DEP" });
             ModifyCategories(budgetEntries, newCategory: "Childcare", existingCategory: "Tuition", accountNames: new string[] { "Checking" }, descriptions: new string[] { "SMART LLC" });
             ModifyCategories(budgetEntries, newCategory: "Tuition", descriptions: new string[] { "MCPHS" });
-            ModifyCategories(budgetEntries, newCategory: "Childcare", descriptions: new string[] { "ADVENTURES PRESCHOOL", "St Peter School", "ZELLE TO BUDANG", "ZELLE TO GANNU RAJANI", "NANCYGKELLY", "HALLIEPETER" });
+            ModifyCategories(budgetEntries, newCategory: "Childcare", descriptions: new string[] {"FULTON SCIENCE ACADEMY", "ADVENTURES PRESCHOOL", "St Peter School", "ZELLE TO BUDANG", "ZELLE TO GANNU RAJANI", "NANCYGKELLY", "HALLIEPETER" });
             ModifyCategories(budgetEntries, newCategory: "Kids", descriptions: new string[] { "British Swim School" });
             ModifyCategories(budgetEntries, newCategory: "529k", accountNames: new string[] { "Wells Fargo" }, descriptions: new string[] { "Morgan Stanley" });
             ModifyCategories(budgetEntries, newCategory: "Groceries", descriptions: new string[] { "COSTCO" });
             ModifyCategories(budgetEntries, newCategory: "Groceries", accountNames: new string[] { "Costco Anywhere" } , descriptions: new string[] { "AUTOPAY" });
             ModifyCategories(budgetEntries, newCategory: "Restaurants", descriptions: new string[] { "Good To Go, Inc." });
+            ModifyCategories(budgetEntries, newCategory: "Shopping", descriptions: new string[] { "Affirm", "The UPS Store" });
             ModifyCategories(budgetEntries, newCategory: "Gas", descriptions: new string[] { "NATIONAL GRID" });
             ModifyCategories(budgetEntries, newCategory: "Electricity", existingCategory: "Utilities", descriptions: new string[] { "EVERSOURCE" });
             ModifyCategories(budgetEntries, newCategory: "Gas & Fuel", descriptions: new string[] { "Auto Clinic" });
-            ModifyCategories(budgetEntries, newCategory: "Service & Parts", descriptions: new string[] { "Car Wash" });
+            ModifyCategories(budgetEntries, newCategory: "Service & Parts", descriptions: new string[] { "Car Wash", "Trad Auto Center" });
             ModifyCategories(budgetEntries, newCategory: "Auto Payment", descriptions: new string[] { "MONTHLY AUTO NEW PAYMENT", "TRANSFER TO LOAN 141" });
             ModifyCategories(budgetEntries, newCategory: "Food Services", descriptions: new string[] { "RASHMI SHAH", "ZELLE TO SONIA", "ZELLE TO S PROMILA" });
             ModifyCategories(budgetEntries, newCategory: "Others", accountNames: new string[] { "VENMO" });
-            ModifyCategories(budgetEntries, newCategory: "Others", descriptions: new string[] { "SRIKANTH KAM", "SAKAEM LOGISTICS", "Zelle Debit", "RIAMONEYTRANSFER", "Xoom", "ZELLE TO KONDA KRISHNA", "CITY OF ", "VENMO" });
+            ModifyCategories(budgetEntries, newCategory: "Others", descriptions: new string[] { "SRIKANTH KAM", "SAKAEM LOGISTICS", "Zelle Debit", "RIAMONEYTRANSFER", "Xoom", "ZELLE TO KONDA KRISHNA", "CITY OF ", "VENMO", "TOWN OF WATERTOWTOWN OF WA", "SH DRAFT" });
             ModifyCategories(budgetEntries, newCategory: "Room Rent", descriptions: new string[] { "ZELLE TO THIRUMALAI SANTHOSH", "BILL PAY Jeff", "Elan Union" });
             ModifyCategories(budgetEntries, newCategory: "Tax", descriptions: new string[] { "MATTHEW JAIBU" });
             ModifyCategories(budgetEntries, newCategory: "Mobile Phone", descriptions: new string[] { "SREELEELA KA" });
