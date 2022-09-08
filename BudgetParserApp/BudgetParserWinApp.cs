@@ -150,11 +150,12 @@ namespace BudgetParserApp
             ModifyCategories(budgetEntries, newCategory: "Groceries", descriptions: new string[] { "COSTCO" });
             ModifyCategories(budgetEntries, newCategory: "Groceries", accountNames: new string[] { "Costco Anywhere" } , descriptions: new string[] { "AUTOPAY" });
             ModifyCategories(budgetEntries, newCategory: "Restaurants", descriptions: new string[] { "Good To Go, Inc." });
-            ModifyCategories(budgetEntries, newCategory: "Shopping", descriptions: new string[] { "Affirm", "The UPS Store" });
+            ModifyCategories(budgetEntries, newCategory: "Shopping", descriptions: new string[] { "Affirm", "The UPS Store", "BEST BUY", "IKEA" });
             ModifyCategories(budgetEntries, newCategory: "Gas", descriptions: new string[] { "NATIONAL GRID" });
             ModifyCategories(budgetEntries, newCategory: "Electricity", existingCategory: "Utilities", descriptions: new string[] { "EVERSOURCE" });
-            ModifyCategories(budgetEntries, newCategory: "Gas & Fuel", descriptions: new string[] { "Auto Clinic" });
+            ModifyCategories(budgetEntries, newCategory: "Gas & Fuel", descriptions: new string[] { "Auto Clinic", "COSTCO GAS" });
             ModifyCategories(budgetEntries, newCategory: "Service & Parts", descriptions: new string[] { "Car Wash", "Trad Auto Center" });
+            ModifyCategories(budgetEntries, newCategory: "Gym", descriptions: new string[] { "LIFE TIME" });
             ModifyCategories(budgetEntries, newCategory: "Auto Payment", descriptions: new string[] { "MONTHLY AUTO NEW PAYMENT", "TRANSFER TO LOAN 141" });
             ModifyCategories(budgetEntries, newCategory: "Food Services", descriptions: new string[] { "RASHMI SHAH", "ZELLE TO SONIA", "ZELLE TO S PROMILA" });
             ModifyCategories(budgetEntries, newCategory: "Others", accountNames: new string[] { "VENMO" });

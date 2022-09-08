@@ -39,6 +39,7 @@ namespace BudgetParserApp
             this.label1 = new System.Windows.Forms.Label();
             this.chkRemoveIdentifiedDuplicates = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
+            DateTime now = DateTime.Now;
             // 
             // openFileDialog
             // 
@@ -85,7 +86,7 @@ namespace BudgetParserApp
             this.startDate.Name = "startDate";
             this.startDate.Size = new System.Drawing.Size(260, 38);
             this.startDate.TabIndex = 3;
-            this.startDate.Value = new System.DateTime(2022, 8, 1, 0, 0, 0, 0);
+            this.startDate.Value = new DateTime(now.Year, now.Month, 1);
             // 
             // endDate
             // 
@@ -95,7 +96,7 @@ namespace BudgetParserApp
             this.endDate.Name = "endDate";
             this.endDate.Size = new System.Drawing.Size(260, 38);
             this.endDate.TabIndex = 4;
-            this.endDate.Value = new System.DateTime(2022, 8, 31, 0, 0, 0, 0);
+            this.endDate.Value = new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month));
             // 
             // label1
             // 
