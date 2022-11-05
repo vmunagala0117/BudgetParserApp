@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.Configuration;
 using System.Globalization;
 using System.Reflection;
+using Microsoft.Office.Interop.Excel;
 
 namespace BudgetParserApp
 {
@@ -68,8 +69,9 @@ namespace BudgetParserApp
             CleanupEntries(budgetEntries, "Transfer", accountName: "Wells Fargo", description: "TRANSFER CREDIT FROM");
             CleanupEntries(budgetEntries, "Transfer", accountName: "Wells Fargo", description: "TRANSFER CREDIT TO");
             CleanupEntries(budgetEntries, "Transfer", accountName: "Wells Fargo", description: "RECURRING TRANSFER TO CHITIKIREDDI V");
-            CleanupEntries(budgetEntries, "Transfer", accountName: "Wells Fargo", description: "RECURRING TRANSFER FROM CHITIKIREDDI V");            
-            
+            CleanupEntries(budgetEntries, "Transfer", accountName: "Wells Fargo", description: "RECURRING TRANSFER FROM CHITIKIREDDI V");
+            CleanupEntries(budgetEntries, "Transfer", accountName: "Costco Anywhere", description: "AUTOPAY AUTO-PMT");
+
             CleanupEntries(budgetEntries, "Transfer", accountName: "Savings Plus Account");
             CleanupEntries(budgetEntries, "Transfer", accountName: "Day-to-Day Savings");
             CleanupEntries(budgetEntries, "Transfer", accountName: "Accelerate Savings");
@@ -152,12 +154,14 @@ namespace BudgetParserApp
             ModifyCategories(budgetEntries, newCategory: "Restaurants", descriptions: new string[] { "Good To Go, Inc." });
             ModifyCategories(budgetEntries, newCategory: "Shopping", descriptions: new string[] { "Affirm", "The UPS Store", "BEST BUY", "IKEA" });
             ModifyCategories(budgetEntries, newCategory: "Gas", descriptions: new string[] { "NATIONAL GRID" });
-            ModifyCategories(budgetEntries, newCategory: "Electricity", existingCategory: "Utilities", descriptions: new string[] { "EVERSOURCE" });
+            ModifyCategories(budgetEntries, newCategory: "Electricity", existingCategory: "Utilities", descriptions: new string[] { "EVERSOURCE", "SAWNEE ELECTRIC" });
+            ModifyCategories(budgetEntries, newCategory: "Sewer", existingCategory: "Utilities", descriptions: new string[] { "WATER & SEWER SERVICES" });
             ModifyCategories(budgetEntries, newCategory: "Gas & Fuel", descriptions: new string[] { "Auto Clinic", "COSTCO GAS" });
             ModifyCategories(budgetEntries, newCategory: "Service & Parts", descriptions: new string[] { "Car Wash", "Trad Auto Center" });
             ModifyCategories(budgetEntries, newCategory: "Gym", descriptions: new string[] { "LIFE TIME" });
             ModifyCategories(budgetEntries, newCategory: "Auto Payment", descriptions: new string[] { "MONTHLY AUTO NEW PAYMENT", "TRANSFER TO LOAN 141" });
             ModifyCategories(budgetEntries, newCategory: "Food Services", descriptions: new string[] { "RASHMI SHAH", "ZELLE TO SONIA", "ZELLE TO S PROMILA" });
+            ModifyCategories(budgetEntries, newCategory: "Home Services", descriptions: new string[] { "ZELLE TO VERONICA"});
             ModifyCategories(budgetEntries, newCategory: "Others", accountNames: new string[] { "VENMO" });
             ModifyCategories(budgetEntries, newCategory: "Others", descriptions: new string[] { "SRIKANTH KAM", "SAKAEM LOGISTICS", "Zelle Debit", "RIAMONEYTRANSFER", "Xoom", "ZELLE TO KONDA KRISHNA", "CITY OF ", "VENMO", "TOWN OF WATERTOWTOWN OF WA", "SH DRAFT" });
             ModifyCategories(budgetEntries, newCategory: "Room Rent", descriptions: new string[] { "ZELLE TO THIRUMALAI SANTHOSH", "BILL PAY Jeff", "Elan Union" });
