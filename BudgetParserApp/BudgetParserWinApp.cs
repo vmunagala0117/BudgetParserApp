@@ -34,10 +34,10 @@ namespace BudgetParserApp
 
         private void btnProcess_Click(object sender, EventArgs e)
         {
-            using (var csv = new CsvReader(File.OpenText(txtFilePath.Text)))
+            using (var csv = new CsvReader(File.OpenText(txtFilePath.Text), CultureInfo.InvariantCulture))
             {
-                csv.Configuration.HasHeaderRecord = true;
-                csv.Configuration.RegisterClassMap<BudgetClassMap>();
+                //csv.Configuration.HasHeaderRecord = true;
+                csv.Context.RegisterClassMap<BudgetClassMap>();
 
                 DateTime sDate = DateTime.Parse(startDate.Text);
                 DateTime eDate = DateTime.Parse(endDate.Text);
@@ -143,17 +143,17 @@ namespace BudgetParserApp
             ModifyColumn(budgetEntries, "AccountName", "Checking", "Checking-3256");
             //Modify Categories
             ModifyCategories(budgetEntries, newCategory: "Vamsi Paycheck", existingCategory: "Paycheck", accountNames: new string[] { "Checking" }, descriptions: new string[] { "INSIGHT DIRECT", "ACH Electronic Credit" });
-            ModifyCategories(budgetEntries, newCategory: "Vidya Paycheck", existingCategory: "Paycheck", accountNames: new string[] { "Checking" }, descriptions: new string[] { "TAKEDA DEVELOPME DIRECT DEP" });
+            ModifyCategories(budgetEntries, newCategory: "Vidya Paycheck", existingCategory: "Paycheck", accountNames: new string[] { "Checking" }, descriptions: new string[] { "TAKEDA DEVELOPME DIRECT DEP", "ALEXION PHARMACE DIRECT DEP" });
             ModifyCategories(budgetEntries, newCategory: "Childcare", existingCategory: "Tuition", accountNames: new string[] { "Checking" }, descriptions: new string[] { "SMART LLC" });
             ModifyCategories(budgetEntries, newCategory: "Tuition", descriptions: new string[] { "MCPHS" });
             ModifyCategories(budgetEntries, newCategory: "Childcare", descriptions: new string[] {"FULTON SCIENCE ACADEMY", "ADVENTURES PRESCHOOL", "St Peter School", "ZELLE TO BUDANG", "ZELLE TO GANNU RAJANI", "NANCYGKELLY", "HALLIEPETER" });
-            ModifyCategories(budgetEntries, newCategory: "Kids", descriptions: new string[] { "British Swim School" });
+            ModifyCategories(budgetEntries, newCategory: "Kids", descriptions: new string[] { "British Swim School", "DIVENTURES ATLANTA" });
             ModifyCategories(budgetEntries, newCategory: "529k", accountNames: new string[] { "Wells Fargo" }, descriptions: new string[] { "Morgan Stanley" });
             ModifyCategories(budgetEntries, newCategory: "Groceries", descriptions: new string[] { "COSTCO" });
             ModifyCategories(budgetEntries, newCategory: "Groceries", accountNames: new string[] { "Costco Anywhere" } , descriptions: new string[] { "AUTOPAY" });
             ModifyCategories(budgetEntries, newCategory: "Restaurants", descriptions: new string[] { "Good To Go, Inc." });
             ModifyCategories(budgetEntries, newCategory: "Shopping", descriptions: new string[] { "Affirm", "The UPS Store", "BEST BUY", "IKEA" });
-            ModifyCategories(budgetEntries, newCategory: "Gas", descriptions: new string[] { "NATIONAL GRID" });
+            ModifyCategories(budgetEntries, newCategory: "Gas", descriptions: new string[] { "NATIONAL GRID", "SPI*GA NATGAS" });
             ModifyCategories(budgetEntries, newCategory: "Electricity", existingCategory: "Utilities", descriptions: new string[] { "EVERSOURCE", "SAWNEE ELECTRIC" });
             ModifyCategories(budgetEntries, newCategory: "Sewer", existingCategory: "Utilities", descriptions: new string[] { "WATER & SEWER SERVICES" });
             ModifyCategories(budgetEntries, newCategory: "Gas & Fuel", descriptions: new string[] { "Auto Clinic", "COSTCO GAS" });

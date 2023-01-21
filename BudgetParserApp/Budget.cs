@@ -20,15 +20,15 @@ namespace BudgetParserApp
         public bool IsAPotentialDuplicate { get; set; }
     }
 
-    public sealed class BudgetClassMap : CsvClassMap<Budget>
+    public sealed class BudgetClassMap : ClassMap<Budget>
     {
         public BudgetClassMap()
         {
             Map(m => m.AccountName).Name("Account Name");
-            Map(m => m.Amount).Name("Amount").TypeConverterOption(NumberStyles.Float);
-            Map(m => m.Date).Name("Date").TypeConverterOption(DateTimeStyles.AdjustToUniversal);
-            Map(m => m.Description).Name("Description").TypeConverterOption(CultureInfo.InvariantCulture);
-            Map(m => m.OriginalDescription).Name("Original Description").TypeConverterOption(CultureInfo.InvariantCulture);
+            Map(m => m.Amount).Name("Amount").TypeConverterOption.NumberStyles(NumberStyles.Float);
+            Map(m => m.Date).Name("Date").TypeConverterOption.DateTimeStyles(DateTimeStyles.AdjustToUniversal);
+            Map(m => m.Description).Name("Description").TypeConverterOption.CultureInfo(CultureInfo.InvariantCulture);
+            Map(m => m.OriginalDescription).Name("Original Description").TypeConverterOption.CultureInfo(CultureInfo.InvariantCulture);
             Map(m => m.TransactionType).Name("Transaction Type");
             Map(m => m.Category).Name("Category");
         }
